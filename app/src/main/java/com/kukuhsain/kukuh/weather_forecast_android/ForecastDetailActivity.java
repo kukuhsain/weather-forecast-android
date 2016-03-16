@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.kukuhsain.kukuh.weather_forecast_android.DataClass.*;
+
 public class ForecastDetailActivity extends AppCompatActivity {
 
     @Override
