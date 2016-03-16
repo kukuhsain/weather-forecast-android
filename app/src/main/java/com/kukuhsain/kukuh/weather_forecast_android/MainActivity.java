@@ -1,5 +1,6 @@
 package com.kukuhsain.kukuh.weather_forecast_android;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -7,6 +8,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.google.gson.Gson;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -56,6 +59,12 @@ public class MainActivity extends AppCompatActivity {
                                for (int i=0; i<response.body().list.size(); i++) {
                                    Log.d("success", "" + response.body().list.get(i).weather.get(0).icon);
                                }
+
+                               Gson gson = new Gson();
+                               Intent intent = new Intent(MainActivity.this, ForecastListActivity.class);
+                               intent.putExtra("response", gson.toJson(response.body()));
+                               startActivity(intent);
+
                            }
 
                            @Override
