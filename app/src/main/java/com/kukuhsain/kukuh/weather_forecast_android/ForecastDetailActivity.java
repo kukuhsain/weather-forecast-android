@@ -38,6 +38,9 @@ public class ForecastDetailActivity extends AppCompatActivity {
         String stringCity = getIntent().getStringExtra("city");
         String stringSingleList = getIntent().getStringExtra("single-list");
 
+        City city = gson.fromJson(stringCity, City.class);
+        ForecastDataList list = gson.fromJson(stringSingleList, ForecastDataList.class);
+
         Log.d("city", stringCity);
         Log.d("list", stringSingleList);
 
@@ -52,7 +55,15 @@ public class ForecastDetailActivity extends AppCompatActivity {
         TextView timeTemp = (TextView) findViewById(R.id.detail_time_temp);
         TextView coord = (TextView) findViewById(R.id.detail_coord);
 
-        
-
+        cityCountry.setText(city.name + ", " + city.country);
+        weatherMain.setText(list.weather.get(0).main);
+        weatherDesc.setText(list.weather.get(0).description);
+        wind.setText(list.speed + " m/sec");
+        cloudiness.setText(list.clouds + " %");
+        pressure.setText(list.pressure + " hPa");
+        humidity.setText(list.humidity + " %");
+        rangeTemp.setText(list.temp.min + "C - " + list.temp.max + "C");
+        timeTemp.setText(list.temp.morn + "C, " + list.temp.day + "C, " + list.temp.eve + "C, " + list.temp.night + "C");
+        coord.setText("[ " + city.coord.lat + ", " + city.coord.lon + " ]");
     }
 }
