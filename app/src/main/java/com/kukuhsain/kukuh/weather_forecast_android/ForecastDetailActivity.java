@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 
@@ -39,6 +40,19 @@ public class ForecastDetailActivity extends AppCompatActivity {
 
         Log.d("city", stringCity);
         Log.d("list", stringSingleList);
+
+        TextView cityCountry = (TextView) findViewById(R.id.detail_city_country);
+        TextView weatherMain = (TextView) findViewById(R.id.detail_weather_main);
+        TextView weatherDesc = (TextView) findViewById(R.id.detail_weather_desc);
+        TextView wind = (TextView) findViewById(R.id.detail_wind);
+        TextView cloudiness = (TextView) findViewById(R.id.detail_cloudiness);
+        TextView pressure = (TextView) findViewById(R.id.detail_pressure);
+        TextView humidity = (TextView) findViewById(R.id.detail_humidity);
+        TextView rangeTemp = (TextView) findViewById(R.id.detail_range_temp);
+        TextView timeTemp = (TextView) findViewById(R.id.detail_time_temp);
+        TextView coord = (TextView) findViewById(R.id.detail_coord);
+
+        
 
     }
 }
