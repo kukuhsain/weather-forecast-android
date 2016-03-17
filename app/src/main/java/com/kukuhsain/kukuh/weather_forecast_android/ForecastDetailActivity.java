@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
 //import com.kukuhsain.kukuh.weather_forecast_android.DataClass.*;
@@ -45,6 +47,7 @@ public class ForecastDetailActivity extends AppCompatActivity {
         Log.d("list", stringSingleList);
 
         TextView cityCountry = (TextView) findViewById(R.id.detail_city_country);
+        ImageView weatherIcon = (ImageView) findViewById(R.id.detail_icon);
         TextView weatherMain = (TextView) findViewById(R.id.detail_weather_main);
         TextView weatherDesc = (TextView) findViewById(R.id.detail_weather_desc);
         TextView wind = (TextView) findViewById(R.id.detail_wind);
@@ -65,5 +68,15 @@ public class ForecastDetailActivity extends AppCompatActivity {
         rangeTemp.setText(list.temp.min + "C - " + list.temp.max + "C");
         timeTemp.setText(list.temp.morn + "C, " + list.temp.day + "C, " + list.temp.eve + "C, " + list.temp.night + "C");
         coord.setText("[ " + city.coord.lat + ", " + city.coord.lon + " ]");
+
+        String image_url = "http://api.openweathermap.org/img/w/" + list.weather.get(0).icon + ".png";
+        Log.d("url", image_url);
+
+        Glide.with(ForecastDetailActivity.this)
+                .load(image_url)
+                .centerCrop()
+                .crossFade()
+                .into(weatherIcon);
+
     }
 }
