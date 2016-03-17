@@ -1,13 +1,17 @@
 package com.kukuhsain.kukuh.weather_forecast_android;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 
 import com.google.gson.Gson;
 
@@ -37,44 +41,153 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void inputCity(View view) {
-        String city = "London";
-        String mode = "json";
-        String units = "metric";
-        String cnt = "16";
-        String appid = "cef209f6f46bb527dba385b81b808ce9";
+//        String city = "London";
+        final String mode = "json";
+        final String units = "metric";
+        final String cnt = "16";
+        final String appid = "cef209f6f46bb527dba385b81b808ce9";
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://api.openweathermap.org")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        ForecastService service = retrofit.create(ForecastService.class);
-        Call<ForecastResult> result = service.result(city, mode, units, cnt, appid);
+        final ForecastService service = retrofit.create(ForecastService.class);
 
-        result.enqueue(new Callback<ForecastResult>() {
-                           @Override
-                           public void onResponse(Call<ForecastResult> call, Response<ForecastResult> response) {
-                               Log.d("success", call.toString());
-                               Log.d("success", response.message());
-                               for (int i=0; i<response.body().list.size(); i++) {
-                                   Log.d("success", "" + response.body().list.get(i).weather.get(0).icon);
+        // Alert Dialog
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+        alertDialog.setTitle("Input City");
+
+        View dialogView = (View) LayoutInflater.from(MainActivity.this).inflate(R.layout.input_city_dialog, null);
+        final EditText inputCity = (EditText) dialogView.findViewById(R.id.input_city);
+
+        alertDialog.setView(dialogView);
+        alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Call<ForecastResult> result = service.result(inputCity.getText().toString(), mode, units, cnt, appid);
+                result.enqueue(new Callback<ForecastResult>() {
+                                   @Override
+                                   public void onResponse(Call<ForecastResult> call, Response<ForecastResult> response) {
+                                       Log.d("success", call.toString());
+                                       Log.d("success", response.message());
+                                       for (int i = 0; i < response.body().list.size(); i++) {
+                                           Log.d("success", "" + response.body().list.get(i).weather.get(0).icon);
+                                       }
+
+                                       Gson gson = new Gson();
+                                       Intent intent = new Intent(MainActivity.this, ForecastListActivity.class);
+                                       intent.putExtra("response", gson.toJson(response.body()));
+                                       startActivity(intent);
+
+                                   }
+
+                                   @Override
+                                   public void onFailure(Call<ForecastResult> call, Throwable t) {
+                                       Log.d("user", "Gagalll");
+                                       Log.e("errorrr", t.getMessage());
+                                   }
                                }
-
-                               Gson gson = new Gson();
-                               Intent intent = new Intent(MainActivity.this, ForecastListActivity.class);
-                               intent.putExtra("response", gson.toJson(response.body()));
-                               startActivity(intent);
-
-                           }
-
-                           @Override
-                           public void onFailure(Call<ForecastResult> call, Throwable t) {
-                               Log.d("user", "Gagalll");
-                               Log.e("errorrr", t.getMessage());
-                           }
-                       }
-        );
+                );
+                dialog.dismiss();
+            }
+        });
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alertDialog.show();
     }
+
+    private void asd() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+        alertDialog.setTitle("Input City");
+
+        View view = (View) LayoutInflater.from(MainActivity.this).inflate(R.layout.input_city_dialog, null);
+        EditText inputCity = (EditText) view.findViewById(R.id.input_city);
+
+        alertDialog.setView(view);
+        alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        /*alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                EditText add_person = (EditText) ((AlertDialog) dialog).findViewById(R.id.add_person);
+                person = add_person.getText().toString();
+                Log.d("person", person);
+            }
+        });*/
+        /*alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                finish();
+            }
+        });*/
+        alertDialog.show();
+    }
+
+
+    /**
+     * get access location
+     */
+    /*private void accessLocation() {
+        // cek apakah sudah memiliki permission untuk access fine location
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // cek apakah perlu menampilkan info kenapa membutuhkan access fine location
+            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                Toast.makeText(MainActivity.this, "Access to your location is needed",
+                        Toast.LENGTH_SHORT).show();
+
+                String[] perm = { Manifest.permission.ACCESS_FINE_LOCATION };
+                ActivityCompat.requestPermissions(MainActivity.this, perm,
+                        RP_ACCESS_LOCATION);
+            } else {
+                // request permission untuk access fine location
+                String[] perm = { Manifest.permission.ACCESS_FINE_LOCATION };
+                ActivityCompat.requestPermissions(MainActivity.this, perm,
+                        RP_ACCESS_LOCATION);
+            }
+        } else {
+            // permission access fine location didapat
+            Toast.makeText(WithoutEasyPermissionActivity.this, "Thank you for allowing to access your location",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case RP_ACCESS_LOCATION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // do location thing
+                    // access location didapatkan
+                    Toast.makeText(WithoutEasyPermissionActivity.this, "Yay, has location permission",
+                            Toast.LENGTH_SHORT).show();
+
+                    doSomething();
+                } else {
+                    // access location ditolak user
+                    Toast.makeText(WithoutEasyPermissionActivity.this, "permission ditolak user",
+                            Toast.LENGTH_SHORT).show();
+                }
+                return;
+        }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
