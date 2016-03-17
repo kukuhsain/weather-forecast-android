@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -41,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void inputCity(View view) {
-//        String city = "London";
         final String mode = "json";
         final String units = "metric";
         final String cnt = "16";
@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
                                }
                 );
                 dialog.dismiss();
+                Toast.makeText(MainActivity.this, "Please wait...", Toast.LENGTH_LONG).show();
             }
         });
         alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -100,44 +101,6 @@ public class MainActivity extends AppCompatActivity {
         });
         alertDialog.show();
     }
-
-    private void asd() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
-        alertDialog.setTitle("Input City");
-
-        View view = (View) LayoutInflater.from(MainActivity.this).inflate(R.layout.input_city_dialog, null);
-        EditText inputCity = (EditText) view.findViewById(R.id.input_city);
-
-        alertDialog.setView(view);
-        alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        /*alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                EditText add_person = (EditText) ((AlertDialog) dialog).findViewById(R.id.add_person);
-                person = add_person.getText().toString();
-                Log.d("person", person);
-            }
-        });*/
-        /*alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                finish();
-            }
-        });*/
-        alertDialog.show();
-    }
-
 
     /**
      * get access location
