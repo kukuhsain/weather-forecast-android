@@ -36,6 +36,8 @@ public class ForecastListActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+
+
         final Gson gson = new Gson();
         String stringForecast = getIntent().getStringExtra("response");
         final ForecastResult forecast = gson.fromJson(stringForecast, ForecastResult.class);

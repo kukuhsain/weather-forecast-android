@@ -18,11 +18,12 @@
         android:layout_height="wrap_content"
         android:text="Hello World!" />-->
     <Button
+        android:onClick="inputCity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Input City"
-        android:onClick="inputCity"/>
+        android:text="Input City"/>
     <Button
+        android:id="@+id/current_location_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Use Your Location"/>
